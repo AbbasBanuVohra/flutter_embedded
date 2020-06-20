@@ -42,6 +42,59 @@ if(BUILD_TSLIB AND NOT ANDROID)
 endif()
 
 #
+# build RPi-vk-Driver
+#
+if(ENGINE_ENABLE_VULCAN)
+
+    ExternalProject_Add(vulkan_headers
+        GIT_REPOSITORY https://github.com/KhronosGroup/Vulkan-Headers.git
+        GIT_TAG v1.2.144
+        GIT_SHALLOW true
+        BUILD_IN_SOURCE 0
+        UPDATE_COMMAND ""
+        CMAKE_ARGS
+            -DCMAKE_TOOLCHAIN_FILE=${CMAKE_BINARY_DIR}/target.toolchain.cmake
+            -DCMAKE_INSTALL_PREFIX=${TARGET_SYSROOT}/usr
+            -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+            -DCMAKE_VERBOSE_MAKEFILE=TRUE
+    )
+    add_dependencies(vulkan_headers sysroot)
+
+    ExternalProject_Add(vulkan_loader
+        GIT_REPOSITORY https://github.com/KhronosGroup/Vulkan-Loader.git
+        GIT_TAG sdk-1.2.141.0
+        GIT_SHALLOW true
+        BUILD_IN_SOURCE 0
+        UPDATE_COMMAND ""
+        CMAKE_ARGS
+            -DCMAKE_TOOLCHAIN_FILE=${CMAKE_BINARY_DIR}/target.toolchain.cmake
+            -DCMAKE_INSTALL_PREFIX=${TARGET_SYSROOT}/usr
+            -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+            -DCMAKE_VERBOSE_MAKEFILE=TRUE
+            -DVULKAN_HEADERS_INSTALL_DIR=${TARGET_SYSROOT}/usr
+            -DBUILD_WSI_XCB_SUPPORT=OFF
+            -DBUILD_WSI_XLIB_SUPPORT=OFF
+            -DBUILD_WSI_WAYLAND_SUPPORT=OFF
+    )
+    add_dependencies(vulkan_loader engine)
+
+    ExternalProject_Add(rpi_vk
+        GIT_REPOSITORY https://github.com/jwinarske/rpi-vk-driver.git
+        GIT_TAG cmake_for_clang
+        GIT_SHALLOW true
+        BUILD_IN_SOURCE 0
+        UPDATE_COMMAND ""
+        CMAKE_ARGS
+            -DCMAKE_TOOLCHAIN_FILE=${CMAKE_BINARY_DIR}/target.toolchain.cmake
+            -DCMAKE_INSTALL_PREFIX=${TARGET_SYSROOT}/usr
+            -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+            -DCMAKE_VERBOSE_MAKEFILE=TRUE
+        )
+    add_dependencies(rpi_vk vulkan_loader)
+
+endif()
+
+#
 # build flutter glfw example
 #
 if(BUILD_GLFW_FLUTTER)
