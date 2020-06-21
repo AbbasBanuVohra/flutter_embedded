@@ -58,7 +58,7 @@ if(ENGINE_ENABLE_VULCAN)
             -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
             -DCMAKE_VERBOSE_MAKEFILE=TRUE
     )
-    add_dependencies(vulkan_headers sysroot)
+    add_dependencies(vulkan_headers symlink_fixups)
 
     ExternalProject_Add(vulkan_loader
         GIT_REPOSITORY https://github.com/KhronosGroup/Vulkan-Loader.git

@@ -32,10 +32,10 @@ option(ENGINE_GOMA "Enable goma" OFF)
 option(ENGINE_LTO "Enable lto" ON)
 option(ENGINE_CLANG "Enable clang" ON)
 option(ENGINE_EMBEDDER_FOR_TARGET "Embedder for Target" ON)
-option(ENGINE_ENABLE_VULCAN "Enable Vulcan" OFF)
+option(ENGINE_ENABLE_VULKAN "Enable Vulcan" OFF)
 option(ENGINE_ENABLE_FONTCONFIG "Enable Font Config" ON)
 option(ENGINE_ENABLE_SKSHAPER "Enable skshaper" OFF)
-option(ENGINE_ENABLE_VULCAN_VALIDATION_LAYERS "Enable Vulcan Validation Layers" OFF)
+option(ENGINE_ENABLE_VULKAN_VALIDATION_LAYERS "Enable Vulkan Validation Layers" OFF)
 option(ENGINE_COVERAGE "Enable Code Coverage" OFF)
 option(ENGINE_FULL_DART_SDK "Enable Full Dart SDK" ON)
 option(ENGINE_DISABLE_DESKTOP "Disable Desktop" ON)
@@ -137,7 +137,7 @@ else()
     list(APPEND ENGINE_FLAGS --no-clang)
 endif()
 
-if(ENGINE_ENABLE_VULCAN)
+if(ENGINE_ENABLE_VULKAN)
     list(APPEND ENGINE_FLAGS --enable-vulkan)
 endif()
 
@@ -149,7 +149,7 @@ if(ENGINE_ENABLE_SKSHAPER)
     list(APPEND ENGINE_FLAGS --enable-skshaper)
 endif()
 
-if(ENGINE_ENABLE_VULCAN_VALIDATION_LAYERS)
+if(ENGINE_ENABLE_VULKAN_VALIDATION_LAYERS)
     list(APPEND ENGINE_FLAGS --enable-vulkan-validation-layers)
 endif()
 
@@ -203,7 +203,7 @@ else()
 
         set(TARGET_TRIPLE armv7-unknown-linux-gnueabihf)
         set(TARGET_TRIPLE_RUNTIME arm-linux-gnueabihf)
-        
+
         # if must match target arch or it will fail install
         set(PACKAGE_ARCH armhf)
 
@@ -212,7 +212,7 @@ else()
         endif()
 
         set(ENGINE_OUT_DIR out/linux_${ENGINE_RUNTIME_MODE}_arm)
-        if(ENGINE_ENABLE_VULCAN)
+        if(ENGINE_ENABLE_VULKAN)
             set(ENGINE_OUT_DIR ${ENGINE_OUT_DIR}_vulkan)
         endif()
 
@@ -239,7 +239,7 @@ else()
         list(APPEND ENGINE_LIB_FLAGS -nostdlib++)
         list(APPEND ENGINE_LIB_FLAGS -fuse-ld=lld)
         string(REPLACE ";" " " ENGINE_LIB_FLAGS "${ENGINE_LIB_FLAGS}")
-        
+
         # Target CXX Flags
         list(APPEND TARGET_CXX_FLAGS -I${THIRD_PARTY_DIR}/engine/src/buildtools/linux-x64/clang/include)
         if(BUILD_FLUTTER_RPI)
